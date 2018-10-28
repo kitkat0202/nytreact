@@ -2,14 +2,6 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const routes = require("./routes")
-const keys = require('./config/keys')
-
-let key = keys.API_KEY
-// Database Models
-// const db = require("./models")
-
-// const cheerio = require("cheerios")
-// const axios = require("axios")
 
 const PORT = process.env.PORT || 3001
 
@@ -29,10 +21,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 // If deployed, use the deployed database. Otherwise use the local nytreact database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/nytreact"
-mongoose.set('useCreateIndex', true)
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
-    .catch(err => console.log(err))
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/nytreact", { useMongoClient: true })
 
 app.listen(PORT, () => {
     console.log(`PORT: ${PORT} if on localhost --> http://localhost:${PORT}`)
